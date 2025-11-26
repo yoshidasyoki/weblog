@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Response;
-use App\Services\RegisterService;
 
 class RegisterController extends Controller
 {
@@ -16,8 +15,7 @@ class RegisterController extends Controller
 
     public function create()
     {
-        $service = $this->getService();
-        $result = $service->register($_POST['username'], $_POST['email'], $_POST['password']);
+        $result = $this->service->register($_POST['username'], $_POST['email'], $_POST['password']);
 
         if ($result['flag'] === false) {
             $content = $this->render('index', ['errors' => $result['errors']]);

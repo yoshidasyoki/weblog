@@ -30,12 +30,10 @@ class Application
 
     public function run()
     {
-        $this->connectDatabase();
         session_start();
+        $this->connectDatabase();
 
         $accessPath = $this->request->getAccessPath();
-        $this->authMiddleware->handle($accessPath);
-
         $routing = $this->router->resolve($accessPath);
 
         $controllerName = 'App\\Controllers\\' . ucfirst($routing['controller']) . 'Controller';
@@ -52,7 +50,12 @@ class Application
             '/register' => ['controller' => 'register', 'action' => 'index'],
             '/register/create' => ['controller' => 'register', 'action' => 'create'],
             '/logout' => ['controller' => 'login', 'action' => 'logout'],
-            '/home' => ['controller' => 'home', 'action' => 'index'],
+            '/' => ['controller' => 'home', 'action' => 'index'],
+            '/article' => ['controller' => 'article', 'action' => 'index'],
+            '/article/write' => ['controller' => 'article', 'action' => 'write'],
+            '/article/write/post' => ['controller' => 'article', 'action' => 'post'],
+            '/history' => ['controller' => 'article', 'action' => 'history'],
+            '/history/edit' => ['controller' => 'article', 'action' => 'edit']
         ];
     }
 

@@ -10,11 +10,13 @@ class Controller
     protected DatabaseManager $databaseManager;
     protected View $view;
     protected string $actionName;
+    protected $service;
 
     public function __construct(Application $app)
     {
         $this->databaseManager = $app->getDatabaseManager();
         $this->view = $app->getView();
+        $this->service = $this->getService();
     }
 
     public function run($actionName)
@@ -36,12 +38,21 @@ class Controller
         return $this->view->render($viewPath, $params);
     }
 
-    protected function getService()
+    // private function getModel(string $modelName = '')
+    // {
+    //     if (empty($modelName))
+    //     {
+    //         $modelName = $this->getControllerName();
+    //     }
+
+    //     $modelName = $modelName . 'Model';
+    //     return $this->databaseManager->getModel($modelName);
+    // }
+
+    private function getService()
     {
-        $modelName = $this->getControllerName() . 'Model';
         $serviceName = 'App\\Services\\' . $this->getControllerName() . 'Service';
-        $loginModel = $this->databaseManager->getModel($modelName);
-        return new $serviceName($loginModel);
+        return new $serviceName($this->databaseManager);
     }
 
     private function getControllerName(): string

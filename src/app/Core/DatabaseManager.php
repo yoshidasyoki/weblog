@@ -3,8 +3,6 @@
 namespace App\Core;
 
 use \PDO;
-use App\Models\LoginModel;
-use App\Core\DatabaseModel;
 
 class DatabaseManager
 {

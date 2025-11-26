@@ -2,10 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Application;
 use App\Core\Response;
 use App\Core\Controller;
-use App\Services\LoginService;
 
 class LoginController extends Controller
 {
@@ -17,34 +15,29 @@ class LoginController extends Controller
 
     public function auth()
     {
-        $service = $this->getService();
-        $result = $service->auth($_POST['email'], $_POST['password']);
+        $result = $this->service->auth($_POST['email'], $_POST['password']);
 
         if ($result['flag'] === false) {
             $content = $this->render('index', ['errors' => $result['errors']]);
             return Response::html(200, $content);
         }
 
-        $userId = $result['user']['id'];
+        $userInfo = $result['user'];
+        $userId = $userInfo['user_id'];
+        $username = $userInfo['username'];
 
         session_regenerate_id(true);
         $_SESSION['user_id'] = $userId;
-        return Response::redirect('/home');
+        $_SESSION['username'] = $username;
+        return Response::redirect('/');
     }
 
     public function logout()
     {
         $_SESSION = [];
-        setcookie('PHPSESSID', '', time() - 3600);
-        session_destroy();
+        session_regenerate_id(true);
+        $_SESSION['logoutMsg'] = 'ログアウトしました';
 
-        $content = $this->render();
-        return Response::html(200, $content);
+        return Response::redirect('/');
     }
-
-    // private function getService(): LoginService
-    // {
-    //     $loginModel = $this->databaseManager->getModel('LoginModel');
-    //     return new LoginService($loginModel);
-    // }
 }

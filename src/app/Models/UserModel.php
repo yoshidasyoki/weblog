@@ -4,8 +4,21 @@ namespace App\Models;
 
 use App\Core\DatabaseModel;
 
-class RegisterModel extends DatabaseModel
+class UserModel extends DatabaseModel
 {
+    public function findUserInfo($email) {
+        $sql = <<<EOT
+            SELECT * FROM users
+            WHERE email = :email AND deleted_at IS NULL
+        EOT;
+
+        $params = [
+            ['placeholder' => ':email', 'value' => $email],
+        ];
+
+        return $this->fetchData($sql, $params, 'one');
+    }
+
     public function findEmail($email) {
         $sql = <<<EOT
             SELECT email FROM users

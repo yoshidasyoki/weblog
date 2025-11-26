@@ -1,0 +1,37 @@
+.logout-body {
+    background-color: #e6f4ff; /* 優しい水色背景 */
+    font-family: "Helvetica", "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.logout-container {
+    max-width: 400px;
+    margin: 120px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.logout-title {
+    color: #0077cc;
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.back-login-link {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #0099ff;
+    color: #ffffff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.25s ease;
+}
+
+.back-login-link:hover {
+    background-color: #007acc;
+}

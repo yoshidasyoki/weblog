@@ -2,12 +2,12 @@
 
 namespace App\Core;
 
-use App\Core\Response;
-
 class Request
 {
-    public function getAccessPath(): string
+    public function getAccessPath()
     {
-        return $_SERVER['REQUEST_URI'];
+        $url = $_SERVER['REQUEST_URI'];
+        $path = parse_url($url)['path'];
+        return $path;
     }
 }
