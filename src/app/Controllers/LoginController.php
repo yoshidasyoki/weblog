@@ -9,7 +9,14 @@ class LoginController extends Controller
 {
     public function index(): Response
     {
-        $content = $this->render();
+        $result = [];
+
+        if (!empty($_SESSION['message'])) {
+            $result['message'] = $_SESSION['message'];
+            $_SESSION['message'] = [];
+        }
+
+        $content = $this->render('index', $result);
         return Response::html(200, $content);
     }
 
@@ -36,7 +43,7 @@ class LoginController extends Controller
     {
         $_SESSION = [];
         session_regenerate_id(true);
-        $_SESSION['logoutMsg'] = 'ログアウトしました';
+        $_SESSION['message'] = 'ログアウトしました';
 
         return Response::redirect('/');
     }

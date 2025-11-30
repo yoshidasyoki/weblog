@@ -20,9 +20,9 @@ class HomeController extends Controller
             ];
         }
 
-        if (isset($_SESSION['logoutMsg'])) {
-            $params['message'] = $_SESSION['logoutMsg'];
-            unset($_SESSION['logoutMsg']);
+        if (isset($_SESSION['message'])) {
+            $params['message'] = $_SESSION['message'];
+            $_SESSION['message'] = [];
         }
 
         $params['articles'] = $this->service->getAllArticles();

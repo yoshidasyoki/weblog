@@ -15,6 +15,20 @@ body {
   border: 2px solid #e2e2e2;
 }
 
+.message {
+  position: fixed;
+  top: 38px;
+  right: 50%;
+  transform: translateX(50%);
+  background: #bfffd0;
+  color: #006714;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: fadeout 3s forwards;
+}
+
 h1 {
   text-align: center;
   color: #0099FF;
@@ -36,8 +50,8 @@ label {
   color: #005A91;
 }
 
-input[type="text"],
-input[type="password"] {
+input[type=text],
+input[type=password] {
   width: 100%;
   padding: 0.6rem;
   border-radius: 6px;
@@ -77,3 +91,18 @@ button:hover {
 .register-link:hover {
   text-decoration: underline;
 }
+
+@keyframes fadeout {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}/*# sourceMappingURL=index.css.map */

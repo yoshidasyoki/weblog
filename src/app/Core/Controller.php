@@ -4,18 +4,23 @@ namespace App\Core;
 
 use App\Application;
 use App\Core\DatabaseManager;
+use App\Core\View;
+use App\Helpers\TimeHelper;
 
 class Controller
 {
     protected DatabaseManager $databaseManager;
     protected View $view;
+    protected TimeHelper $timeHelper;
     protected string $actionName;
+
     protected $service;
 
     public function __construct(Application $app)
     {
         $this->databaseManager = $app->getDatabaseManager();
         $this->view = $app->getView();
+        $this->timeHelper = $app->getTimeHelper();
         $this->service = $this->getService();
     }
 
@@ -38,21 +43,10 @@ class Controller
         return $this->view->render($viewPath, $params);
     }
 
-    // private function getModel(string $modelName = '')
-    // {
-    //     if (empty($modelName))
-    //     {
-    //         $modelName = $this->getControllerName();
-    //     }
-
-    //     $modelName = $modelName . 'Model';
-    //     return $this->databaseManager->getModel($modelName);
-    // }
-
     private function getService()
     {
         $serviceName = 'App\\Services\\' . $this->getControllerName() . 'Service';
-        return new $serviceName($this->databaseManager);
+        return new $serviceName($this->databaseManager, $this->timeHelper);
     }
 
     private function getControllerName(): string

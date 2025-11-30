@@ -22,6 +22,7 @@ class RegisterController extends Controller
             return Response::html(200, $content);
         }
 
+        $_SESSION['message'] = '登録が完了しました';
         return Response::redirect('/login');
     }
 }

@@ -7,6 +7,7 @@ use App\Core\DatabaseManager;
 use App\Core\Request;
 use App\Core\Router;
 use App\Core\View;
+use App\Helpers\TimeHelper;
 use App\Middleware\AuthMiddleware;
 
 class Application
@@ -17,6 +18,7 @@ class Application
     private Request $request;
     private Router $router;
     private View $view;
+    private TimeHelper $timeHelper;
 
     public function __construct()
     {
@@ -26,6 +28,7 @@ class Application
         $this->request = new Request();
         $this->router = new Router($this->registerRouting());
         $this->view = new View(__DIR__ . '/views');
+        $this->timeHelper = new TimeHelper();
     }
 
     public function run()
@@ -45,17 +48,19 @@ class Application
     public function registerRouting()
     {
         return [
+            '/' => ['controller' => 'home', 'action' => 'index'],
             '/login' => ['controller' => 'login', 'action' => 'index'],
             '/login/auth' => ['controller' => 'login', 'action' => 'auth'],
             '/register' => ['controller' => 'register', 'action' => 'index'],
             '/register/create' => ['controller' => 'register', 'action' => 'create'],
             '/logout' => ['controller' => 'login', 'action' => 'logout'],
-            '/' => ['controller' => 'home', 'action' => 'index'],
             '/article' => ['controller' => 'article', 'action' => 'index'],
             '/article/write' => ['controller' => 'article', 'action' => 'write'],
             '/article/write/post' => ['controller' => 'article', 'action' => 'post'],
             '/history' => ['controller' => 'article', 'action' => 'history'],
-            '/history/edit' => ['controller' => 'article', 'action' => 'edit']
+            '/history/edit' => ['controller' => 'article', 'action' => 'edit'],
+            '/history/edit/update' => ['controller' => 'article', 'action' => 'update'],
+            '/history/edit/delete' => ['controller' => 'article', 'action' => 'delete']
         ];
     }
 
@@ -79,5 +84,10 @@ class Application
     public function getView(): View
     {
         return $this->view;
+    }
+
+    public function getTimeHelper(): TimeHelper
+    {
+        return $this->timeHelper;
     }
 }

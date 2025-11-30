@@ -6,12 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ログイン</title>
     <link rel="stylesheet" href="/css/vendor/sanitize.css">
-    <link rel="stylesheet" href="/css/page/login/login.css">
+    <link rel="stylesheet" href="/css/page/login/index.css">
 </head>
 
 <body>
 
     <div class="container">
+        <?php if (isset($message)) : ?>
+            <div class="message">
+                <?= htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
+
         <h1>ログイン</h1>
 
         <?php if (isset($errors)) : ?>

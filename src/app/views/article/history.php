@@ -6,24 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Topページ</title>
     <link rel="stylesheet" href="css/vendor/sanitize.css">
-    <link rel="stylesheet" href="css/page/home/home.css">
+    <link rel="stylesheet" href="css/page/article/history.css">
 
 </head>
 
 <body>
     <header>
-        <h1>Topページ</h1>
-
-        <?php if ($isLoggedIn) : ?>
-            <div>
-                <span>ようこそ、<?= htmlspecialchars($username) ?> さん！</span>
-                <a href="/logout">ログアウト</a>
-                <a href="/article/write">投稿する</a>
-                <a href="/history">編集する</a>
-            </div>
-        <?php else : ?>
-            <a href="/login">ログイン</a>
-        <?php endif; ?>
+        <h1>編集</h1>
+        <div>
+            <a href="/logout">ログアウト</a>
+            <a href="/">トップへ</a>
+        </div>
     </header>
 
     <main>
@@ -33,18 +26,25 @@
             </div>
         <?php endif; ?>
 
-        <h2>記事一覧</h2>
+        <h2>記事の編集</h2>
+        <p>編集したい記事をクリックしてください。</p>
 
         <?php if (empty($articles)) : ?>
-            <p>投稿記事がまだありません。</p>
+            <p>※ 投稿記事がまだありません。</p>
         <?php endif; ?>
 
         <?php foreach ($articles as $article) : ?>
-            <a href="/article?id=<?= htmlspecialchars($article['article_id']); ?>">
+            <a href="/history/edit?id=<?= htmlspecialchars($article['article_id']); ?>">
                 <div class="article">
-                    <h3><?= htmlspecialchars($article['title']); ?></h3>
+                    <div class="sub-header">
+                        <?php if ($article['is_public'] === 1) : ?>
+                            <span class="public">公開</span>
+                        <?php elseif ($article['is_public'] === 0) : ?>
+                            <span class="private">非公開</span>
+                        <?php endif; ?>
+                        <h3><?= htmlspecialchars($article['title']); ?></h3>
+                    </div>
                     <p class="meta">
-                        投稿者: <?= htmlspecialchars($article['username']); ?> /
                         投稿日: <?= htmlspecialchars($article['created_at']) ?> /
                         更新日: <?= htmlspecialchars($article['updated_at']); ?>
                     </p>

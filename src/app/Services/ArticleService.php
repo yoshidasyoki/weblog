@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Core\DatabaseManager;
+use App\Helpers\TimeHelper;
 use App\Models\ArticleModel;
 
 class ArticleService
@@ -12,14 +13,19 @@ class ArticleService
     private const DEFINE_PUBLIC_FLAG_ARRAY = [0, 1];
 
     private ArticleModel $articleModel;
-    public function __construct(private DatabaseManager $databaseManager)
+
+    public function __construct(
+        private DatabaseManager $databaseManager,
+        private TimeHelper $timeHelper)
     {
         $this->articleModel = $this->databaseManager->getModel('ArticleModel');
     }
 
-    public function search(int $articleId)
+    public function search(int $articleId): array
     {
-        return $this->articleModel->findArticle($articleId);
+        $result = $this->articleModel->findArticle($articleId);
+        $result['updated_at'] = $this->timeHelper->convertTimeJst($result['updated_at']);
+        return $result;
     }
 
     public function post(int $userId, array $article)
@@ -42,6 +48,34 @@ class ArticleService
 
         $this->articleModel->insertArticle($userId, $title, $sentence, $publicFlag);
         return ['flag' => true];
+    }
+
+    public function getUserArticles(int $userId)
+    {
+        $articles = $this->articleModel->findUserArticles($userId);
+        return array_map(function($article) {
+            $article['updated_at'] = $this->timeHelper->convertTimeJst($article['updated_at']);
+            $article['created_at'] = $this->timeHelper->convertTimeJst($article['created_at']);
+            return $article;
+        }, $articles);
+    }
+
+    public function getUserArticle(int $articleId, int $userId)
+    {
+        return $this->articleModel->findUserArticle($articleId, $userId);
+    }
+
+    public function update(int $articleId, int $userId, array $updateArticle)
+    {
+        $title = $updateArticle['title'];
+        $sentence = $updateArticle['sentence'];
+        $publicFlag = $updateArticle['is_public'];
+        $this->articleModel->updateArticle($articleId, $userId, $title, $sentence, $publicFlag);
+    }
+
+    public function delete(int $article, int $userId)
+    {
+        $this->articleModel->deleteArticle($article, $userId);
     }
 
     private function validateTitle(string $title, array $errors)

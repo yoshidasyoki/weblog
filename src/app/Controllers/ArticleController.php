@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-use \DateTime;
-use \DateTimeZone;
 use App\Core\Controller;
 use App\Core\Response;
 
@@ -12,9 +10,8 @@ class ArticleController extends Controller
     public function index()
     {
         $articleId = $_GET['id'];
-        $result = $this->service->search($articleId);
-        $result['updated_at'] = $this->convertTimeJst($result['updated_at']);
-        $content = $this->render('index', $result);
+        $article = $this->service->search($articleId);
+        $content = $this->render('index', $article);
         return Response::html(200, $content);
     }
 
@@ -34,17 +31,53 @@ class ArticleController extends Controller
             $content = $this->render('write', $result);
             return Response::html(200, $content);
         }
+
+        $_SESSION['message'] = '投稿が完了しました';
         return Response::redirect('/');
     }
 
     public function history()
     {
+        $result = [];
+
+        if (isset($_SESSION['message'])) {
+            $result['message'] = $_SESSION['message'];
+            $_SESSION['message'] = [];
+        }
+
+        $userId = $_SESSION['user_id'];
+        $result['articles'] = $this->service->getUserArticles($userId);
+        $content = $this->render('history', $result);
+        return Response::html(200, $content);
     }
 
-    private function convertTimeJst($date, $formatType = 'Y年m月d日'): string
+    public function edit()
     {
-        $utc = new DateTime($date, new DateTimeZone('UTC'));
-        $utc->setTimeZone(new DateTimeZone('Asia/Tokyo'));
-        return $utc->format($formatType);
+        $userId = $_SESSION['user_id'];
+        $articleId = $_GET['id'];
+        $result['article'] = $this->service->getUserArticle($articleId, $userId);
+        $content = $this->render('edit', $result);
+        return Response::html(200, $content);
+    }
+
+    public function update()
+    {
+        $articleId = $_GET['id'];
+        $userId = $_SESSION['user_id'];
+        $updateArticle = $_POST['article'];
+        $this->service->update($articleId, $userId, $updateArticle);
+
+        $_SESSION['message'] = '編集が完了しました';
+        return Response::redirect('/history');
+    }
+
+    public function delete()
+    {
+        $articleId = $_GET['id'];
+        $userId = $_SESSION['user_id'];
+        $this->service->delete($articleId, $userId);
+
+        $_SESSION['message'] = '削除しました';
+        return Response::redirect('/history');
     }
 }
