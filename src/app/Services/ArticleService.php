@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Core\DatabaseManager;
+use App\Exceptions\HttpNotFoundException;
 use App\Helpers\TimeHelper;
 use App\Models\ArticleModel;
 
@@ -24,6 +25,10 @@ class ArticleService
     public function search(int $articleId): array
     {
         $result = $this->articleModel->findArticle($articleId);
+        if (!$result) {
+            throw new HttpNotFoundException();
+        }
+
         $result['updated_at'] = $this->timeHelper->convertTimeJst($result['updated_at']);
         return $result;
     }
@@ -62,7 +67,11 @@ class ArticleService
 
     public function getUserArticle(int $articleId, int $userId)
     {
-        return $this->articleModel->findUserArticle($articleId, $userId);
+        $result = $this->articleModel->findUserArticle($articleId, $userId);
+        if (!$result) {
+            throw new HttpNotFoundException();
+        }
+        return $result;
     }
 
     public function update(int $articleId, int $userId, array $updateArticle)

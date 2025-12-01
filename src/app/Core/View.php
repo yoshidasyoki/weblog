@@ -13,7 +13,7 @@ class View
         extract($params);
 
         ob_start();
-        include $this->baseViewPath . '/' . $viewPath;
+        include $this->baseViewPath . '/' . $viewPath . '.php';
         $content = ob_get_clean();
         return $content;
     }

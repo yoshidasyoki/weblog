@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Response;
 use App\Core\Controller;
+use App\Exceptions\HttpNotFoundException;
 
 class LoginController extends Controller
 {
@@ -22,6 +23,10 @@ class LoginController extends Controller
 
     public function auth()
     {
+        if (!$this->request->isPost()) {
+            throw new HttpNotFoundException();
+        }
+
         $result = $this->service->auth($_POST['email'], $_POST['password']);
 
         if ($result['flag'] === false) {

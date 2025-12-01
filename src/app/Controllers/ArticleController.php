@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Response;
+use App\Exceptions\HttpNotFoundException;
 
 class ArticleController extends Controller
 {
@@ -23,6 +24,10 @@ class ArticleController extends Controller
 
     public function post()
     {
+        if (!$this->request->isPost()) {
+            throw new HttpNotFoundException();
+        }
+
         $userId = $_SESSION['user_id'];
         $postedArticle = $_POST['article'];
         $result = $this->service->post($userId, $postedArticle);
@@ -62,6 +67,10 @@ class ArticleController extends Controller
 
     public function update()
     {
+        if (!$this->request->isPost()) {
+            throw new HttpNotFoundException();
+        }
+
         $articleId = $_GET['id'];
         $userId = $_SESSION['user_id'];
         $updateArticle = $_POST['article'];

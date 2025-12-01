@@ -3,21 +3,25 @@
 namespace App\Core;
 
 use App\Application;
+use App\Core\Request;
 use App\Core\DatabaseManager;
 use App\Core\View;
 use App\Helpers\TimeHelper;
 
 class Controller
 {
+    protected Request $request;
     protected DatabaseManager $databaseManager;
     protected View $view;
     protected TimeHelper $timeHelper;
+
     protected string $actionName;
 
     protected $service;
 
     public function __construct(Application $app)
     {
+        $this->request = $app->getRequest();
         $this->databaseManager = $app->getDatabaseManager();
         $this->view = $app->getView();
         $this->timeHelper = $app->getTimeHelper();
@@ -38,7 +42,7 @@ class Controller
             $template = $this->actionName;
         }
 
-        $viewPath = $folderName . '/' . $template . '.php';
+        $viewPath = $folderName . '/' . $template;
 
         return $this->view->render($viewPath, $params);
     }

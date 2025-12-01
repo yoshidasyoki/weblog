@@ -5,10 +5,12 @@ namespace App;
 use App\Core\EnvManager;
 use App\Core\DatabaseManager;
 use App\Core\Request;
+use App\Core\Response;
 use App\Core\Router;
 use App\Core\View;
+use App\Exceptions\HttpNotFoundException;
 use App\Helpers\TimeHelper;
-use App\Middleware\AuthMiddleware;
+use App\Middlewares\AuthMiddleware;
 
 class Application
 {
@@ -33,16 +35,24 @@ class Application
 
     public function run()
     {
-        session_start();
-        $this->connectDatabase();
+        try {
+            session_start();
+            $this->connectDatabase();
 
-        $accessPath = $this->request->getAccessPath();
-        $routing = $this->router->resolve($accessPath);
+            $accessPath = $this->request->getAccessPath();
+            $routing = $this->router->resolve($accessPath);
+            if (!$this->authMiddleware->handle($accessPath)) {
+                return Response::redirect('/login')->send();
+            }
 
-        $controllerName = 'App\\Controllers\\' . ucfirst($routing['controller']) . 'Controller';
-        $actionName = $routing['action'];
-        $response = $this->runAction($controllerName, $actionName);
-        $response->send();
+            $controllerName = 'App\\Controllers\\' . ucfirst($routing['controller']) . 'Controller';
+            $actionName = $routing['action'];
+            $response = $this->runAction($controllerName, $actionName);
+            $response->send();
+        } catch (HttpNotFoundException) {
+            $content = $this->view->render('404page');
+            Response::html(404, $content)->send();
+        }
     }
 
     public function registerRouting()
@@ -79,6 +89,11 @@ class Application
     public function getDatabaseManager(): DatabaseManager
     {
         return $this->databaseManager;
+    }
+
+    public function getRequest(): Request
+    {
+        return $this->request;
     }
 
     public function getView(): View

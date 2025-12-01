@@ -12,7 +12,7 @@
 
 <body>
     <header>
-        <h1>編集</h1>
+        <h1>自分の投稿記事</h1>
         <div>
             <a href="/logout">ログアウト</a>
             <a href="/">トップへ</a>
