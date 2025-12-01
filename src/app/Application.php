@@ -36,7 +36,13 @@ class Application
     public function run()
     {
         try {
+            session_set_cookie_params([
+                'lifetime' => 0,
+                'path' => '/',
+                'httponly' => true
+            ]);
             session_start();
+
             $this->connectDatabase();
 
             $accessPath = $this->request->getAccessPath();
