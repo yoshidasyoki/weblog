@@ -15,6 +15,7 @@ class DatabaseSetup
         $dbh = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
         $this->createUserTable($dbh);
         $this->createArticleTable($dbh);
+        echo 'データベースの構築が完了しました。' . PHP_EOL;
     }
 
     private function createUserTable($dbh)
