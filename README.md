@@ -2,7 +2,7 @@
 ## はじめに
 Web上で動作するブログアプリ（Weblogアプリ）を作成しました。デプロイを行うような正規品ではなく、学習用に作成したものなので機能は「ログイン・記事の新規投稿/更新/削除」といったシンプルなものに限定して作成しました。
 今回の学習についての詳細は以下のページにて紹介しています。  
-https://troubled-event-601.notion.site/Weblog-App-2bd465c59ef380fb8549c6f145363298?source=copy_link
+https://qiita.com/yoshikingcorporation/items/7cc5988df1511c00c9c6
 
 ## 目的
 今回このアプリを作成するにあたっては大きく次の3つの内容を学びました。  
